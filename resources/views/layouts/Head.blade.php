@@ -43,8 +43,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap4.min.css">
 
     <!-- Theme Custom CSS -->
-    <!-- <link rel="stylesheet" href="{{url('/')}}/resources/css/payroll.css"> -->
-    <link rel="stylesheet" href="/resources/css/payroll.css">
+    <link rel="stylesheet" href="{{url('/resources/css/payroll.css')}}">
+    <!-- <link rel="stylesheet" href="/resources/css/payroll.css"> -->
     
 </head>
 <style>

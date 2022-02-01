@@ -18,3 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('/payroll', 'App\Http\Controllers\payrolCalculatorController@payroll');
+route::post('/payroll','App\Http\Controllers\payrolCalculatorController@store')->name('store');

@@ -7,27 +7,17 @@ use App\Models\Payroll;
 
 class payrolCalculatorController extends Controller
 {
-    public function payroll(){
+    public function payroll(Payroll $payroll){
         // $payroll = Payroll::all();
-         $payrollObjs = Payroll::orderByDesc('id')->limit(1)->get();
-        
-        return view('payroll',compact('payrollObjs'));
-
-
-    }
-
-    public function store(Request $request)
-    {
-        $payrollObj = new Payroll;
-        // my starting point
-        $basicSalary = $request->basicPay;
-
+         $payroll =Payroll::orderBy('id')->get();
+         return $payroll->bonuses;
+        $basicSalary = $payroll->basicPay;
 
         $tier1 = $basicSalary * 0.135;
         $tier2 = $basicSalary * 0.05;
         
-        $totalBonus = $request->bonuses;
-        $taxableAllowance = $request->allowance;
+        $totalBonus = $payroll->bonuses;
+        $taxableAllowance = $payroll->allowance;
         $nonTaxableAllowance = 200.00;
 
         $ssnit = $basicSalary * 0.055;
@@ -115,32 +105,33 @@ class payrolCalculatorController extends Controller
         // calculations for the netSalary
         $netSalary = ( $taxableIncome + $nonTaxableAllowance + $extrabonus ) - $totalTax;
 
-        // my ending point for the calculations
 
-        // mapping the variables to the fields in the database
-        
+        return view('payroll',compact(
+            'basicSalary',
+            'ssnit',
+            'employerCost',
+            'taxableIncome',
+            'taxableAllowance',
+            'totalBonus',
+            'nonTaxableAllowance',
+            'PAYE',
+            'taxOnBonus',
+            'excessBonus',
+            'totalTax',
+            'tier1',
+            'tier2',
+            'netSalary',
+            'extrabonus'
+    ));
 
-        $payrollObj -> allowance = $taxableAllowance;
-        $payrollObj -> bonuses = $totalBonus;
-        $payrollObj -> basicPay = $basicSalary;
-        $payrollObj -> ssnit = $ssnit;
-        $payrollObj -> employerCost = $employerCost;
-        $payrollObj -> taxableIncome = $taxableIncome;
-        $payrollObj -> taxableAllowance = $taxableAllowance;
-        $payrollObj -> totalBonus = $totalBonus;
-        $payrollObj -> nonTaxableAllowance = $nonTaxableAllowance;
-        $payrollObj -> PAYE = $PAYE;
-        $payrollObj -> taxOnBonus = $taxOnBonus;
-        $payrollObj -> excessBonus = $excessBonus;
-        $payrollObj -> totalTax = $totalTax;
-        $payrollObj -> tier1 = $tier1;
-        $payrollObj -> tier2 = $tier2;
-        $payrollObj -> netSalary = $netSalary;
-        $payrollObj -> extrabonus = $extrabonus;
 
+    }
+
+    public function store(Request $request)
+    {
         // dd($request->all());
-        $payrollObj ->save();
-        return redirect()->back()->with('message');
+        Payroll::create($request->all());
+        return redirect()->back();
     }
 
 }

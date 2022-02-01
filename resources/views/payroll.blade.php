@@ -20,21 +20,30 @@
                       <div class="mp-span">
                        <i class="fa fa-trash" aria-hidden="true"></i>
                       </div> -->
-                      <table class="table inb-r table-sm">
-                        <thead>
-                          <th class="table_head text-muted">Hours</th>
-                          <th class="table_head text-muted">Rate</th>
-                          <th class="table_head text-muted">Basic Pay</th>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td><input class="pay-input" type="text" placeholder="160.00"></td>
-                            <td><input class="pay-input" type="text" placeholder="60.00"></td>
-                            <td><input class="pay-input" type="text" placeholder="" value="{{$basicSalary}}" disabled></td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <form action="{{route('store')}}" method="post">
+                        @csrf
+                        
+                        <table class="table inb-r table-sm">
+                          <thead>
+                            <th class="table_head text-muted">Allowances</th>
+                            <th class="table_head text-muted">Bonuses</th>
+                            <th class="table_head text-muted">Basic Pay</th>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td><input class="pay-input" type="text" name="allowance"  placeholder="160.00"></td>
+                              <td><input class="pay-input" type="text" name="bonuses"  placeholder="60.00"></td>
+                              <td><input class="pay-input" type="text" name="basicPay"  placeholder="60000.00" ></td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <div style="display:flex; justify-content:end; align-items:center;">
+
+                          <input type="submit" value="submit">
+                        </div>
+                      </form>
                     </div>
+                    <!-- @foreach($payrollObjs as $payrollObj) -->
                     <div class="">
                      <div class="add-salary expand-div"> 
                        <h6>Allowances</h6>
@@ -53,11 +62,11 @@
                         <tbody>
                           <tr>
                             <td class="table_head text-muted">SSNIT TIER 1</td>
-                            <td class="table_head ra"><span>GHS </span>{{$tier1}}<span></span></td>
+                            <td class="table_head ra"><span>GHS </span>{{$payrollObj -> tier1}}<span></span></td>
                           </tr>
                           <tr>
                             <td class="text-muted">SSNIT TIER 2</td>
-                            <td class="ra"><span>GHS </span> <span>{{$tier2}}</span></td>
+                            <td class="ra"><span>GHS </span> <span>{{$payrollObj -> tier2}}</span></td>
                           </tr>
                           <!-- <tr>
                             <td class="text-muted">SSNIT TIER 3</td>
@@ -72,7 +81,7 @@
                         <tbody>
                           <tr>
                             <td class="table_head text-muted">SSNIT(5.5%)</td>
-                            <td class="table_head ra"><span>GHS</span> <span>{{$ssnit ?? 'not available'}}</span></span></td>
+                            <td class="table_head ra"><span>GHS</span> <span>{{$payrollObj ->ssnit ?? 'not available'}}</span></span></td>
                           </tr>
                           <tr>
                             <td class="text-muted">PF Employee Contribution</td>
@@ -103,31 +112,31 @@
                       <tbody>
                         <tr>
                           <td class="table_head text-muted">Basic Pay</td>
-                          <td class="table_head ra"><span>GHS </span> <span>{{$basicSalary}}</span></td>
+                          <td class="table_head ra"><span>GHS </span> <span>{{$payrollObj -> basicPay}}</span></td>
                         </tr>
                         <tr>
                           <td class="table_head text-muted">Taxable Allowance</td>
-                          <td class="table_head ra"><span>GHS </span> <span>{{$taxableAllowance}}</span></td>
+                          <td class="table_head ra"><span>GHS </span> <span>{{$payrollObj ->taxableAllowance}}</span></td>
                         </tr>
                         <tr>
                           <td class="table_head text-muted">Non Taxable Allowance</td>
-                          <td class="table_head ra"><span>GHS</span> <span>{{$nonTaxableAllowance}}</span></td>
+                          <td class="table_head ra"><span>GHS</span> <span>{{$payrollObj ->nonTaxableAllowance}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Bonuses</td>
-                          <td class="ra"><span>GHS</span> <span>{{$totalBonus}}</span></td>
+                          <td class="ra"><span>GHS</span> <span>{{$payrollObj ->totalBonus}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Total Employee Reliefs</td>
-                          <td class="ra"><span>GHS </span> <span>{{$ssnit ?? 'not available'}}</span></td>
+                          <td class="ra"><span>GHS </span> <span>{{$payrollObj ->ssnit ?? 'not available'}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Tax on Bonus</td>
-                          <td class="ra"><span>GHS</span> <span>{{$taxOnBonus ?? 'not available'}}</span></td>
+                          <td class="ra"><span>GHS</span> <span>{{$payrollObj ->taxOnBonus ?? 'not available'}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Excess Bonus</td>
-                          <td class="ra"><span>GHS</span> <span>{{$excessBonus ?? 'not available'}}</span></td>
+                          <td class="ra"><span>GHS</span> <span>{{$payrollObj ->excessBonus ?? 'not available'}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Tax on Overtime</td>
@@ -135,23 +144,23 @@
                         </tr>
                         <tr>
                           <td class="text-muted">Taxable Income</td>
-                          <td class="ra"><span>GHS </span> <span>{{$taxableIncome}}</span></td>
+                          <td class="ra"><span>GHS </span> <span>{{$payrollObj ->taxableIncome}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Income Tax (PAYE)</td>
-                          <td class="ra"><span>GHS</span> <span>{{$PAYE}}</span></td>
+                          <td class="ra"><span>GHS</span> <span>{{$payrollObj ->PAYE}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Total Tax</td>
-                          <td class="ra"><span>GHS </span> <span>{{$totalTax}}</span></td>
+                          <td class="ra"><span>GHS </span> <span>{{$payrollObj ->totalTax}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">Net Pay</td>
-                          <td class="ra"><span>GHS</span> <span>1,450.00</span></td>
+                          <td class="ra"><span>GHS</span> <span>{{$payrollObj ->netSalary}}</span></td>
                         </tr>
                         <tr>
                           <td class="text-muted">SSNIT Employer Cost</td>
-                          <td class="ra"><span>GHS </span> <span>{{$employerCost ?? 'not available'}}</span></td>
+                          <td class="ra"><span>GHS </span> <span>{{$payrollObj ->employerCost ?? 'not available'}}</span></td>
                         </tr>
                       </tbody>
 
@@ -217,7 +226,7 @@
                     </table>
 
                     </div>
-
+                  <!-- @endforeach -->
                   </div>
                </div>
 </div>
